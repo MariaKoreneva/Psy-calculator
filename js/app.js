@@ -3170,6 +3170,193 @@ function renderDaySummaryToCanvas(
 }
 
 
+function isIosDevice() {
+
+    const ua =
+        navigator
+            .userAgent;
+
+
+    if (
+        /iPad|iPhone|iPod/.test(
+            ua
+        )
+    ) {
+
+        return (
+            true
+        );
+    }
+
+
+    return (
+        navigator
+            .platform ===
+        "MacIntel" &&
+        navigator
+            .maxTouchPoints >
+        1
+    );
+}
+
+
+function savePngBlobAsDownload(
+    blob,
+    filename
+) {
+
+    const url =
+        URL.createObjectURL(
+            blob
+        );
+
+
+    const link =
+        document.createElement(
+            "a"
+        );
+
+
+    link.href =
+        url;
+
+
+    link.download =
+        filename ||
+        buildPngFilename();
+
+
+    link.click();
+
+
+    URL.revokeObjectURL(
+        url
+    );
+}
+
+
+async function trySharePngOnIos(
+    blob,
+    filename
+) {
+
+    if (
+        !navigator
+            .share
+    ) {
+
+        return (
+            false
+        );
+    }
+
+
+    const file =
+        new File(
+            [
+                blob
+            ],
+            filename ||
+            buildPngFilename(),
+            {
+                type:
+                    "image/png"
+            }
+        );
+
+
+    const shareData = {
+        files:
+            [
+                file
+            ]
+    };
+
+
+    if (
+        navigator
+            .canShare &&
+        !navigator
+            .canShare(
+                shareData
+            )
+    ) {
+
+        return (
+            false
+        );
+    }
+
+
+    try {
+
+        await navigator
+            .share(
+                shareData
+            );
+
+        return (
+            true
+        );
+
+    } catch (
+        error
+    ) {
+
+        if (
+            error &&
+            error
+                .name ===
+            "AbortError"
+        ) {
+
+            return (
+                true
+            );
+        }
+
+        return (
+            false
+        );
+    }
+}
+
+
+async function deliverPngBlob(
+    blob
+) {
+
+    const filename =
+        buildPngFilename();
+
+
+    if (
+        isIosDevice()
+    ) {
+
+        const shared =
+            await trySharePngOnIos(
+                blob,
+                filename
+            );
+
+
+        if (
+            shared
+        ) {
+
+            return;
+        }
+    }
+
+
+    savePngBlobAsDownload(
+        blob,
+        filename
+    );
+}
+
+
 function downloadDayPng() {
 
     const validation =
@@ -3214,31 +3401,8 @@ function downloadDayPng() {
             }
 
 
-            const url =
-                URL.createObjectURL(
-                    blob
-                );
-
-
-            const link =
-                document.createElement(
-                    "a"
-                );
-
-
-            link.href =
-                url;
-
-
-            link.download =
-                buildPngFilename();
-
-
-            link.click();
-
-
-            URL.revokeObjectURL(
-                url
+            void deliverPngBlob(
+                blob
             );
         },
         "image/png"
