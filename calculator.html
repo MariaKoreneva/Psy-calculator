@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор дня — Калькулятор времени психолога</title>
+    <meta name="description" content="Соберите свой день и посмотрите, сколько времени остаётся на продвижение.">
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="site-header-inner">
+            <a class="logo" href="index.html">
+                <div class="logo-mark" aria-hidden="true">⏱</div>
+                <span>Калькулятор психолога</span>
+            </a>
+            <nav class="nav">
+                <a href="index.html">Главная</a>
+                <a class="active" href="calculator.html">Калькулятор</a>
+                <button
+                    type="button"
+                    class="nav-link"
+                    id="navStartNewDay"
+                >
+                    Начать новый день
+                </button>
+                <button
+                    type="button"
+                    class="nav-link"
+                    id="navFinishDay"
+                >
+                    Завершить день
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <div class="page">
+    <main id="calculatorScreen">
+<!-- Дата -->
+
+<section class="card">
+
+    <h2>
+        Как прошёл ваш день?
+    </h2>
+
+    <p class="lead">
+        Укажите примерное время.
+        Не нужно высчитывать всё до минуты —
+        важна общая картина.
+    </p>
+
+    <div class="date-row">
+
+        <div class="field">
+
+            <label for="dayDate">
+                Дата
+            </label>
+
+            <input
+                id="dayDate"
+                type="date"
+            >
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- Счётчик -->
+
+<section class="card">
+
+    <div class="summary-grid">
+
+        <div class="summary-box">
+
+            <div class="summary-label">
+                Распределено
+            </div>
+
+            <div
+                id="distributedTime"
+                class="summary-value"
+            >
+                0 ч
+            </div>
+
+        </div>
+
+
+        <div class="summary-box">
+
+            <div class="summary-label">
+                Осталось
+            </div>
+
+            <div
+                id="remainingTime"
+                class="summary-value"
+            >
+                24 ч
+            </div>
+
+        </div>
+
+
+        <div class="summary-box">
+
+            <div class="summary-label">
+                Продвижение
+            </div>
+
+            <div
+                id="promotionTimeTop"
+                class="summary-value"
+            >
+                0 мин
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="timeline-labels">
+
+        <span>
+            0 ч
+        </span>
+
+        <span>
+            12 ч
+        </span>
+
+        <span>
+            24 ч
+        </span>
+
+    </div>
+
+
+    <div class="timeline">
+
+        <div
+            id="timelineFill"
+            class="timeline-fill"
+        ></div>
+
+    </div>
+
+
+    <div
+        id="dayMessage"
+        class="day-message"
+    ></div>
+
+</section>
+
+
+<!-- Основные дела -->
+
+<section class="card">
+
+    <h3>
+        Ваш сегодняшний день
+    </h3>
+
+    <div
+        id="defaultActivities"
+        class="activity-list"
+    ></div>
+
+</section>
+
+
+<!-- Свои дела -->
+
+<section class="card">
+
+    <h3>
+        Другие дела
+    </h3>
+
+    <p class="hint">
+        Например: вторая работа, университет,
+        уход за родителями, собака,
+        дополнительная учёба, хобби.
+    </p>
+
+    <div
+        id="customActivities"
+        class="activity-list"
+    ></div>
+
+
+    <button
+        id="addCustomButton"
+        class="btn btn-secondary"
+        style="margin-top:14px;"
+    >
+        + Добавить своё дело
+    </button>
+
+</section>
+
+
+<!-- Цель -->
+
+<section class="card">
+
+    <h3>
+        Сколько времени в день вы хотели бы
+        выделять на продвижение?
+    </h3>
+
+
+    <div
+        id="goalButtons"
+        class="goal-buttons"
+    >
+
+        <button
+            class="goal-button"
+            data-minutes="15"
+        >
+            15 минут
+        </button>
+
+        <button
+            class="goal-button"
+            data-minutes="30"
+        >
+            30 минут
+        </button>
+
+        <button
+            class="goal-button"
+            data-minutes="45"
+        >
+            45 минут
+        </button>
+
+        <button
+            class="goal-button"
+            data-minutes="60"
+        >
+            1 час
+        </button>
+
+        <button
+            class="goal-button"
+            data-minutes="90"
+        >
+            1 час 30 минут
+        </button>
+
+        <button
+            class="goal-button"
+            data-minutes="120"
+        >
+            2 часа
+        </button>
+
+        <button
+            class="goal-button"
+            data-custom="true"
+        >
+            Свой вариант
+        </button>
+
+    </div>
+
+
+    <div
+        id="customGoalFields"
+        class="custom-goal hidden"
+    >
+
+        <div class="field">
+
+            <label for="goalHours">
+                Часы
+            </label>
+
+            <input
+                id="goalHours"
+                type="number"
+                min="0"
+                max="24"
+                value="0"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label for="goalMinutes">
+                Минуты
+            </label>
+
+            <select id="goalMinutes">
+            </select>
+
+        </div>
+
+    </div>
+
+
+</section>
+
+
+<!-- Обычный расчёт -->
+
+<button
+    id="calculateButton"
+    class="btn btn-primary btn-large"
+>
+    Показать мой день
+</button>
+
+
+<!-- =====================================================
+     РЕЗУЛЬТАТ
+===================================================== -->
+
+<section
+    id="resultSection"
+    class="card result-card hidden"
+    style="margin-top:20px;"
+>
+
+    <h2 id="resultTitle">
+        Вот как распределилось ваше время
+    </h2>
+
+
+    <div class="result-top">
+
+        <div class="metric-card">
+
+            <h3>
+                Ваш день
+            </h3>
+
+            <div class="metric-row">
+
+                <span>
+                    Распределено
+                </span>
+
+                <strong
+                    id="resultDistributed"
+                >
+                    —
+                </strong>
+
+            </div>
+
+
+            <div class="metric-row">
+
+                <span>
+                    Свободно
+                </span>
+
+                <strong
+                    id="resultFree"
+                >
+                    —
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="metric-card">
+
+            <h3>
+                Продвижение
+            </h3>
+
+            <div class="metric-row">
+
+                <span>
+                    Сейчас
+                </span>
+
+                <strong
+                    id="resultCurrent"
+                >
+                    —
+                </strong>
+
+            </div>
+
+
+            <div class="metric-row">
+
+                <span>
+                    Хотели бы
+                </span>
+
+                <strong
+                    id="resultGoal"
+                >
+                    —
+                </strong>
+
+            </div>
+
+
+            <div class="metric-row">
+
+                <span
+                    id="shortageLabel"
+                >
+                    Не хватает
+                </span>
+
+                <strong
+                    id="resultShortage"
+                >
+                    —
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="main-answer">
+
+        <div
+            id="mainAnswerTitle"
+            class="main-answer-title"
+        ></div>
+
+        <p
+            id="mainAnswerText"
+        ></p>
+
+        <p
+            id="mainAnswerExtra"
+            style="margin-bottom:0;"
+        ></p>
+
+    </div>
+
+
+    <!-- Цель -->
+
+    <div class="progress-comparison">
+
+        <h3>
+            Ваша цель по продвижению
+        </h3>
+
+
+        <div class="progress-item">
+
+            <div class="progress-label">
+
+                <span>
+                    Сейчас
+                </span>
+
+                <strong
+                    id="currentProgressText"
+                ></strong>
+
+            </div>
+
+
+            <div class="progress-track">
+
+                <div
+                    id="currentProgressBar"
+                    class="progress-bar"
+                ></div>
+
+            </div>
+
+        </div>
+
+
+        <div class="progress-item">
+
+            <div class="progress-label">
+
+                <span>
+                    Хотите
+                </span>
+
+                <strong
+                    id="goalProgressText"
+                ></strong>
+
+            </div>
+
+
+            <div class="progress-track">
+
+                <div
+                    id="goalProgressBar"
+                    class="progress-bar"
+                ></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div
+        class="day-chart-block"
+        style="margin-top:30px;"
+    >
+
+        <h3>
+            Куда уходят ваши 24 часа
+        </h3>
+
+        <div
+            id="dayBarChart"
+            class="day-bar-chart"
+            role="img"
+            aria-label="Распределение времени за 24 часа"
+        ></div>
+
+    </div>
+
+
+    <!-- Топ -->
+
+    <div style="margin-top:28px;">
+
+        <h3>
+            Больше всего времени уходит на
+        </h3>
+
+        <div
+            id="topCategories"
+            class="top-list"
+        ></div>
+
+    </div>
+
+
+    <p class="final-phrase">
+        В сутках не появится 25-й час.
+        Но иногда достаточно увидеть свой день целиком,
+        чтобы понять, где можно освободить время
+        для того, что действительно важно.
+    </p>
+
+
+    <div class="actions">
+
+        <button
+            id="reviewButton"
+            class="btn btn-primary"
+        >
+            Посмотреть, где освободить время
+        </button>
+
+
+        <button
+            id="editButton"
+            class="btn btn-secondary"
+        >
+            Исправить данные
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     ГДЕ ОСВОБОДИТЬ
+===================================================== -->
+
+<section
+    id="reviewSection"
+    class="card hidden"
+>
+
+    <h2>
+        Посмотрите на ваш день ещё раз
+    </h2>
+
+    <p class="lead">
+        Не нужно автоматически сокращать сон,
+        отдых или важные обязанности.
+        Посмотрите на крупные блоки времени
+        и решите сами:
+        есть ли среди них то,
+        что можно немного сократить,
+        объединить, перенести,
+        упростить или выполнять реже.
+    </p>
+
+
+    <div
+        id="reviewList"
+        class="review-list"
+    ></div>
+
+
+    <div class="review-note">
+
+        <strong>
+            Ваша задача:
+        </strong>
+
+        <p
+            id="reviewGoalText"
+            style="margin:6px 0 0;"
+        ></p>
+
+    </div>
+
+</section>
+
+
+<section
+    id="dayCompletionBlock"
+    class="card day-completion-block"
+    style="margin-top:20px;"
+>
+
+    <h2>
+        Сохраните итог дня
+    </h2>
+
+    <p class="hint">
+        Скачайте изображение с диаграммой и результатами,
+        чтобы при желании сравнивать свои дни.
+    </p>
+
+    <div
+        id="dayExportSection"
+        class="day-completion-actions"
+    >
+
+        <div class="day-completion-slot day-action-slot">
+
+            <button
+                type="button"
+                id="downloadDayPngButton"
+                class="btn btn-primary btn-large"
+            >
+                Скачать итог дня
+            </button>
+
+        </div>
+
+        <div class="day-completion-slot day-action-slot">
+
+            <button
+                type="button"
+                id="startNewDayButton"
+                class="btn btn-secondary btn-large"
+            >
+                Начать новый день
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+    </main>
+    </div>
+
+    <footer class="site-footer">
+        <div class="site-footer-inner">
+            <a
+                href="index.html"
+                class="btn btn-secondary"
+            >
+                На главную
+            </a>
+            <span>Автор проекта — Мария Коренева</span>
+        </div>
+    </footer>
+
+    <div
+        id="newDayConfirm"
+        class="confirm-overlay hidden"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="newDayConfirmTitle"
+    >
+
+        <div class="card confirm-card">
+
+            <h3 id="newDayConfirmTitle">
+                Начать новый день?
+            </h3>
+
+            <p class="hint">
+                Не забудьте сохранить итог предыдущего дня!
+            </p>
+
+            <p>
+                После подтверждения все заполненные данные будут удалены.
+                Если вы ещё не скачали результат, нажмите «Отмена» и сохраните его.
+            </p>
+
+            <div class="confirm-actions">
+
+                <button
+                    type="button"
+                    id="newDayConfirmCancel"
+                    class="btn btn-secondary"
+                >
+                    Отмена
+                </button>
+
+                <button
+                    type="button"
+                    id="newDayConfirmOk"
+                    class="btn btn-primary"
+                >
+                    Да, начать новый день
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
